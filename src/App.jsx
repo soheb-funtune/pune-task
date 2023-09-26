@@ -19,6 +19,10 @@ function App() {
       path: "/registration",
       element: <RegistrationForm />,
     },
+    {
+      path: "/*",
+      element: <h1>Error Page...</h1>,
+    },
   ]);
 
   return <RouterProvider router={router} />;
