@@ -25,7 +25,7 @@ const schema = yup.object({
 
 const Login = () => {
   const navigate = useNavigate();
-  const { auth, provider, setToken } = useAuthContext();
+  const { auth, provider, setToken, ApiCall, setError } = useAuthContext();
 
   const {
     register,
@@ -40,12 +40,17 @@ const Login = () => {
   });
 
   const onSubmit = async (data) => {
-    const { email, password } = data;
-    const res = await signInWithEmailAndPassword(auth, email, password);
-    console.log("res login:", res);
-    if (res) {
-      setToken(res.user.accessToken);
-      navigate("/");
+    try {
+      const { email, password } = data;
+      const res = await signInWithEmailAndPassword(auth, email, password);
+      ApiCall({ email, password }, "login");
+      console.log("res login:", res);
+      if (res) {
+        setToken(res.user.accessToken);
+        navigate("/");
+      }
+    } catch (err) {
+      setError(err);
     }
   };
   console.log({ errors });

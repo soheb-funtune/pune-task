@@ -26,10 +26,9 @@ const schema = yup.object({
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
-  const { auth } = useAuthContext();
+  const { auth, ApiCall, setError } = useAuthContext();
 
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -45,9 +44,14 @@ const RegistrationForm = () => {
   console.log("reg errors:", errors);
 
   const onSubmit = async (data) => {
-    const { name, email, password } = data;
-    const res = await createUserWithEmailAndPassword(auth, email, password);
-    navigate("/login");
+    try {
+      const { name, email, password } = data;
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      ApiCall(data, "register");
+      navigate("/login");
+    } catch (err) {
+      setError(err);
+    }
   };
 
   return (

@@ -26,9 +26,41 @@ export const useAuthContext = () => {
 
 export const ContextWrap = ({ children }) => {
   const [token, setToken] = useState(null);
+  const [error, setError] = useState("");
+  const [apiData, setApiData] = useState(null);
+  const ApiCall = (postData, endPoint) => {
+    const apiUrl = "https://reqres.in/api/";
+
+    fetch(`${apiUrl}${endPoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setApiData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error: :", error);
+        setError(toString(error));
+      });
+  };
   return (
     <AuthContext.Provider
-      value={{ count: "20", auth, provider, token, setToken }}
+      value={{
+        count: "20",
+        auth,
+        provider,
+        token,
+        setToken,
+        ApiCall,
+        setError,
+        error,
+        apiData,
+      }}
     >
       {children}
     </AuthContext.Provider>
