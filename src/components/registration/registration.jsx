@@ -47,7 +47,7 @@ const RegistrationForm = () => {
     try {
       const { name, email, password } = data;
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      ApiCall(data, "register");
+      ApiCall(data, "/register");
       navigate("/login");
     } catch (err) {
       setError(err);

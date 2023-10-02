@@ -43,7 +43,7 @@ const Login = () => {
     try {
       const { email, password } = data;
       const res = await signInWithEmailAndPassword(auth, email, password);
-      ApiCall({ email, password }, "login");
+      ApiCall({ email, password }, "/login");
       console.log("res login:", res);
       if (res) {
         setToken(res.user.accessToken);
@@ -53,7 +53,7 @@ const Login = () => {
       setError(err);
     }
   };
-  console.log({ errors });
+  // console.log({ errors });
   const signInWithGoogle = async () => {
     try {
       const res = await signInWithPopup(auth, provider);
