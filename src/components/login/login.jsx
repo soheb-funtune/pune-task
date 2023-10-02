@@ -15,17 +15,18 @@ const schema = yup.object({
   password: yup
     .string()
     .required("Password is required!")
-    .matches(
-      /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/,
-      "Password should be strong!"
-    )
+    // .matches(
+    //   /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/,
+    //   "Password should be strong!"
+    // )
     .min(8)
     .max(20, "Password should be less than 20"),
 });
 
 const Login = () => {
   const navigate = useNavigate();
-  const { auth, provider, setToken, ApiCall, setError } = useAuthContext();
+  const { auth, provider, setToken, apiData, ApiCall, setError } =
+    useAuthContext();
 
   const {
     register,
@@ -39,16 +40,22 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => {
+    if (!apiData?.id && apiData?.token) {
+      navigate("/");
+    }
+  }, [apiData]);
+
   const onSubmit = async (data) => {
     try {
       const { email, password } = data;
-      const res = await signInWithEmailAndPassword(auth, email, password);
+      // const res = await signInWithEmailAndPassword(auth, email, password);
       ApiCall({ email, password }, "/login");
-      console.log("res login:", res);
-      if (res) {
-        setToken(res.user.accessToken);
-        navigate("/");
-      }
+      // console.log("res login:", res);
+      // if (res) {
+      //   // setToken(res.user.accessToken);
+      //   navigate("/");
+      // }
     } catch (err) {
       setError(err);
     }

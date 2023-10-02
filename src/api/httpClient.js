@@ -33,6 +33,7 @@ const HttpClient = async (
   if (options.queryParams) {
     const queryString = stringify(options.queryParams);
     fullPath = `${fullPath}?${queryString}`;
+    console.log({ fullPath });
   }
 
   return await restClient({
@@ -41,9 +42,10 @@ const HttpClient = async (
     data: options.data,
   })
     .then((response) => {
+      console.log({ response });
       return {
         data: response?.data || {},
-        error: response?.data.error || response?.data.message,
+        errors: response?.error || response?.data.message,
         message: response?.data.message,
         success:
           (response?.status === 200 || response?.status === 201) &&
@@ -52,12 +54,13 @@ const HttpClient = async (
       };
     })
     .catch((err) => {
+      console.log("err:", err);
       return {
         data: err,
-        errors: err?.response?.data.errors,
+        errors: err?.response?.data?.error,
         success: false, // mock status
         errorData: err?.response?.data,
-        message: err?.response?.message || err?.response?.data?.message,
+        message: err?.message || err?.response?.data?.message,
         ...(allowRaw && { raw_error: err }),
       };
     });

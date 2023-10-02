@@ -16,17 +16,17 @@ const schema = yup.object({
   password: yup
     .string()
     .required("Password is required!")
-    .matches(
-      /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/,
-      "Password should be strong!"
-    )
+    // .matches(
+    //   /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/,
+    //   "Password should be strong!"
+    // )
     .min(8)
     .max(20, "Password should be less than 20"),
 });
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
-  const { auth, ApiCall, setError } = useAuthContext();
+  const { auth, ApiCall, error, apiData, setError } = useAuthContext();
 
   const {
     register,
@@ -41,14 +41,18 @@ const RegistrationForm = () => {
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => {
+    if (apiData?.id && apiData?.token) navigate("/login");
+  }, [apiData]);
+
   console.log("reg errors:", errors);
 
   const onSubmit = async (data) => {
     try {
       const { name, email, password } = data;
-      const res = await createUserWithEmailAndPassword(auth, email, password);
+      // let res = await createUserWithEmailAndPassword(auth, email, password);
+      // if (res?.error?.message) setError(res?.error?.message);
       ApiCall(data, "/register");
-      navigate("/login");
     } catch (err) {
       setError(err);
     }

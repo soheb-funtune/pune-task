@@ -7,7 +7,7 @@ import { signOut } from "firebase/auth";
 const Home = () => {
   const [time, setTime] = useState(60);
   const navigate = useNavigate();
-  const { token, auth, setToken } = useAuthContext();
+  const { token, auth, setApiData, setToken } = useAuthContext();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,7 +28,9 @@ const Home = () => {
     <div>
       <StyledButton
         onClick={() => {
-          signOut(auth);
+          // signOut(auth);
+          setApiData(null);
+          setToken(null);
           navigate("/login");
         }}
       >

@@ -32,7 +32,6 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />;
-      {error && <ErrorPage errorText={error} />}
     </>
   );
 }

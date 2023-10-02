@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { useAuthContext } from "../auth-context/auth-context";
 
 const ErrorContainer = styled.div`
   display: flex;
+  background-color: rgba(243, 243, 243, 0.5);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -22,9 +24,13 @@ const ErrorMessage = styled.h1`
 `;
 
 const ErrorPage = ({ errorText }) => {
+  const { setError } = useAuthContext();
   return (
     <ErrorContainer>
-      <ErrorMessage>{errorText}</ErrorMessage>
+      <ErrorMessage>
+        {errorText}
+        <button onClick={() => setError("")}>OK</button>
+      </ErrorMessage>
     </ErrorContainer>
   );
 };
